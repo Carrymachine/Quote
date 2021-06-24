@@ -1,13 +1,14 @@
 import QuoteView from './component/QuoteView'
 import Card from './component/Card'
-import styled, { createGlobalStyle } from 'styled-components'
-import { useState, useCallback } from 'react'
+import styled, { createGlobalStyle, ThemeProvider, css } from 'styled-components'
+import { useState, useCallback, useEffect } from 'react'
 
 const quoteList = [
   {
       id : 0,
       value : "불편해? 불편하면 자세를 고쳐앉아. 보는 자세가 잘못된거 아니예요.",
-      author : "- Ralo the man of Gimhae"
+      author : "- Ralo the man of Gimhae",
+      
   },
   {
       id : 1,
@@ -26,11 +27,26 @@ const quoteList = [
   }
 ];
 
+const colorList = [
+  {
+    color: '#f39c12'
+  },
+  {
+    color: 'rgb(251, 105, 100)'
+  },
+  {
+    color: 'rgb(115, 168, 87)'
+  },
+  {
+    color: '#472e32'
+  }
+];
+
 const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
     padding: 0;
-    
+    box-sizing: border-box;
     
   }
   body {
@@ -39,32 +55,37 @@ const GlobalStyle = createGlobalStyle`
     align-items: center;
     height: 100vh;
 
-    background-color: var(--brown);
-  }
-  :root {
-    --yellow: rgb(243, 156, 18);
-    --red: rgb(251, 105, 100);
-    --green: rgb(115, 168, 87);
-    --brown: rgb(52, 34, 36);
-  }
+    ${props => {
+      const color = colorList[0].color;
+      return css`
+        background: ${color};
+      `;
+    }};
 `;
 
 
 
 function App() {
-  const [quote, setQuote] = useState("");
+  const [quote, setQuote] = useState(quoteList[0]);
+  const [color, setColor] = useState(colorList[0].color);
+
 
   const handleChange = useCallback(() => {
-    const randomQuoteIndex = Math.floor(Math.random()*quoteList.length);
-    setQuote(quoteList[randomQuoteIndex].value);
+    const randomIndex = Math.floor(Math.random()*quoteList.length);
+    setQuote(quoteList[randomIndex]);
+    setColor(colorList[randomIndex].color);
+    document.body.style.color = color; //이거 왜 되는거임?
+    document.body.style.background = color;
+    
+
   });
 
   return (
     <>
-    <GlobalStyle />
-    <Card quoteData={quote} onChange={handleChange}>
-        <QuoteView cardData={quote}/>
-    </Card>
+      <GlobalStyle body />
+        <Card quoteData={quote} colorData={color} onChange={handleChange}>
+          <QuoteView cardData={quote}/>
+        </Card>
     </>
   );
 }
