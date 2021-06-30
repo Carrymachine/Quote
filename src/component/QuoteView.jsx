@@ -24,8 +24,8 @@ const QuoteView = ({viewData}) => {
 
     return (
         <ViewWrap>
-            <View start>{viewData.value}</View>
-            <AuthorBox end><div>{viewData.author}</div></AuthorBox>
+            <View >{viewData.value}</View>
+            <AuthorBox ><div>{viewData.author}</div></AuthorBox>
         </ViewWrap>
     );
 }
